@@ -8,15 +8,11 @@
       <a href="\dashboard">
         <div class="NavButton">Dashboard</div>
       </a>
-      <a href="\">
-        <div class="NavButton">Offer</div>
+      <a href="\calendar">
+        <div class="NavButton">Calendar</div>
       </a>
-      <a href="\about"> <div class="NavButton">About</div> </a>
-      <a href="\contact">
-        <div class="NavButton">Contact</div>
-      </a>
-      <a href="\">
-        <div class="NavButton">Merch</div>
+      <a href="\kanban">
+        <div class="NavButton">Kanban</div>
       </a>
     </div>
     <div class="NavLoginDiv">
