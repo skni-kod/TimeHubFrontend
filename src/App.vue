@@ -32,7 +32,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  height: 100%;
   // overflow-y: hidden; // this needs to be addressed
 }
 
