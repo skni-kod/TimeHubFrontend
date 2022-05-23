@@ -10,8 +10,16 @@
   top: 0;
   left: 0;
   right: 0;
-  height: fit-content;
+  bottom: 0;
+  height: 100vh;
+  overflow-y: hidden;
   z-index: -1;
+  ::-webkit-scrollbar:horizontal {
+    height: 12px;
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    background-color: #2c3e50aa;
+  }
 }
 </style>
 
