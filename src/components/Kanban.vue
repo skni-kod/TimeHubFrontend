@@ -2,7 +2,7 @@
   <div class="kanban">Kanban placeholder</div>
 </template>
 
-<style>
+<style scoped>
 .kanban {
   width: 100%;
   height: 25%;

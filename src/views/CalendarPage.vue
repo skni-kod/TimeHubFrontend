@@ -1,25 +1,18 @@
 <template>
   <div>
-    <h1>You are on the {{ pageName }} page.</h1>
-    <CalendarVue></CalendarVue>
+    <h1>You are on the {{ URLPageName }} page.</h1>
+    <kalendarz></kalendarz>
   </div>
 </template>
 
-<script lang="ts">
-import CalendarVue from "@/components/Calendar.vue";
+<script setup lang="ts">
 
-export default {
-  components: {
-    CalendarVue,
-  },
+import kalendarz from '../components/Calendar.vue'
+import { ref } from 'vue'
 
-  setup(): { pageName: string } {
-    var path = window.location.pathname;
-    const URLPageName = path.substring(path.lastIndexOf("/") + 1);
 
-    return {
-      pageName: URLPageName,
-    };
-  },
-};
+  
+  var path = window.location.pathname;
+  const URLPageName = ref(path.substring(path.lastIndexOf("/") + 1));
+  
 </script>
