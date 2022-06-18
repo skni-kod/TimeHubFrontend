@@ -1,6 +1,6 @@
 <template>
   <div class="statisticsPage">
-    <Statistics></Statistics>
+    <Statistics :zmienna="zrobione" :zmienna2="wtrakcie"></Statistics>
   </div>
 </template>
 
@@ -8,24 +8,16 @@
 import Statistics from "../components/Statistics.vue";
 import axios from 'axios'
 
+
 export default {
   components: {
     Statistics,
   },
 
 async created() {
-    const { data } = await axios.get("https://jsonplaceholder.typicode.com/users/2/todos");
-    let arrUserId = [];
-    let arrId = [];
-
-    for(let i = 0; i<data.length;i++)
-    {
-      arrUserId.push(data[i].userId);
-      arrId.push(data[i].id);
-    }
-
-    console.log(arrUserId);
-    console.log(arrId); 
+    const { data } = await axios.get("https://projekt-timehub.herokuapp.com/api/statystykaNotatkiSkonczoneAktywne7Dni/");
+    this.zrobione = (data.zrobione+1); //+1 jest dla testu xd
+    this.wtrakcie = (data.w_trakcie);
   },
   
 
@@ -37,5 +29,11 @@ async created() {
       pageName: URLPageName,
     };
   },
+
+  data(){return {
+  tablica: this.tablica,
+  zrobione: this.zrobione,
+  wtrakcie: this.wtrakcie
+  }}
 };
 </script>
