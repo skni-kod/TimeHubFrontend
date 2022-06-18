@@ -19,7 +19,7 @@
       <a href="\">
         <div class="NavButton">Log in</div>
       </a>
-      <a href="\">
+      <a href="\register">
         <div class="NavButton">Register</div>
       </a>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="square" v-if="x=1">
+  <div class="square" >
     <div class="heading">
       <h1>TimeHUB</h1>
     </div>
@@ -11,17 +11,17 @@
       <input class="haslo" type="text" placeholder="Hasło"/>
     </div>
     <div class="button1">
-      <button class="loginbutton" type="button">
-        <h4>Log In</h4>
+      <button class="loginbutton" type="button" onclick="window.location.href='/'">
+        <h4>Register</h4>
       </button>
     </div>
       <div class="underbutton">
         <div class="tile">
-          Are you not registered?
+          Are you already registered?
         </div>
         <div class="tile">
-          <button class="changebutton" type="button" onclick="window.location.href='/register'">
-            Register now
+          <button class="changebutton" type="button" onclick="window.location.href='/'">
+            Log In now
           </button>
         </div>
       </div> 
