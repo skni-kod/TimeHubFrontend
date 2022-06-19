@@ -7,8 +7,32 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useEvents } from '@/composables/useEvents.js'
+import axios from 'axios';
+import { onMounted } from "vue";
+
+onMounted(() => {
+  axios.get('https://projekt-timehub.herokuapp.com/api/uzytkownikNotatki/', {headers: {
+        Authorization: 'Bearer ' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU1NjcwNDA5LCJpYXQiOjE2NTU2NjY4MDksImp0aSI6IjIzZGQyZjhiYTY1NzRhZGZiZDI4YWVjZjliYzlmMTU1IiwidXNlcl9pZCI6Mn0.KOuK4rypXtDYxgYs-kQZpWc831ueNxQeiQ8EfZFH5-o",
+      }}).then(Data=>{
+    console.log(Data);
+    options.events = Data.data.map(e=>{
+      return{
+      id: e.id,
+      title: e.zawartosc,
+      start: e.data_rozpoczecia,
+      end: e.data_zakonczenia,
+      allDay: true
+      }
+    });
+  })
+  .catch(error=>console.log(error))
+})
 
 const id = ref(10)
+
+const events = ref([
+
+]);
 
 const { getEvents, createEvent, updateEvent, deleteEvent } = useEvents()
 
@@ -72,7 +96,7 @@ watch(getEvents, () => {
 </script>
 
 <template>
-  <FullCalendar class="calendar" :options="options" />
+  <FullCalendar class="calendar" :options="options"/>
 </template>
 
 <style scoped>
