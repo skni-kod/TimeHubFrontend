@@ -1,45 +1,90 @@
 <template>
-  <div class="square" v-if="x=1">
-    <div class="heading">
-      <h1>TimeHUB</h1>
+  <div class="mainpanel" v-if="!auth">
+    <div class="square" v-if="x=1">
+      <div class="heading">
+        <h1>TimeHUB</h1>
+      </div>
+      <div class = "placeholder">
+        <input class="login" v-model="username" type="text" placeholder="Login"/>
+      </div>
+      <div style="clear:both;"></div>
+      <div class = "placeholder">
+        <input class="haslo" v-model="password" type="password" placeholder="Hasło"/>
+      </div>
+      <div class="button1">
+        <button class="loginbutton" type="button" @click="login">
+          <h4>Zaloguj się</h4>
+        </button>
+      </div>
+      <p>{{error}}</p>
+        <div class="underbutton">
+          <div class="tile1">
+            Nie jesteś zarejestrowany?
+          </div>
+          <div class="tile1">
+            <button class="changebutton" type="button" onclick="window.location.href='/register'">
+              Zarejestruj się teraz
+            </button>
+          </div>
+        </div> 
     </div>
-    <div class = "placeholder">
-      <input class="login" type="text" placeholder="Login"/>
+  </div>
+  <div class="description">
+  <h1> O TimeHUB </h1>
+    <div class="tile2">
+      <div class="text">
+        Projekt TimeHUB został założony przez ośmioosobową 
+        grupę studentów II roku Informatyki. Ośmioro członków
+        Studenckiego Koła Naukowego Informatyków KOD, postanowiło
+        stworzyć system ułatwiający organizację pracy w zespole.
+        Dzięki wsparciu koła naukowego oraz prowadzących projektu 
+        możliwe było stworzenie aplikacji TimeHUB.
+      </div>
+      <div class="photo1">
+      <img :src="require('../assets/LogoSkniKod.png')" alt="SKNI KOD">
+      </div>
     </div>
-    <div style="clear:both;"></div>
-    <div class = "placeholder">
-      <input class="haslo" type="text" placeholder="Hasło"/>
+    <div class="tile2">
+      <div class="photo2"><img :src="require('../assets/Wykresy.png')" alt="Wykresy"></div>
+      <div class="text">
+        TimeHub pozawala na łatwe oraz efektywne organizowanie pracy
+        w zespole. Umożliwia podział pracy między członków zespołu, 
+        poprzez przydzielanie zadań do konkretnych użytkowników.
+        Intuicyjny system wykresów zapewnia przejrzyste śledzenie
+        postępów grupy. Platforma jest dostępna zarówno w przhlądarce 
+        jak i w aplikacji mobilnej.
+      </div>
     </div>
-    <div class="button1">
-      <button class="loginbutton" type="button">
-        <h4>Log In</h4>
-      </button>
-    </div>
-      <div class="underbutton">
-        <div class="tile">
-          Are you not registered?
-        </div>
-        <div class="tile">
-          <button class="changebutton" type="button" onclick="window.location.href='/register'">
-            Register now
-          </button>
-        </div>
-      </div> 
+    
   </div>
 </template>
 
 <style>
-
+.mainpanel{
+  background-color: white;
+  width: 100%;
+  height: 400px;
+  padding: 15px;
+}
+.description{
+  width: 100%;
+  align: center;
+  margin-top: 15px;
+  background-color: #F6F6F6;
+  box-shadow: 0px 0px 7px gray, 0 0 2px inset gray;
+  padding: 10px;
+}
 .square{
   align: center;
-  width: 55%;
-  height: 280px;
-  background-color: #F6F6F6;
+  width: 600px;
+  height: auto;
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
+  background-color: #F6F6F6;
   box-shadow: 0px 0px 7px gray, 0 0 2px inset gray;
   border-radius: 16px;
+  padding:10px;
 }
 .heading{
   width: 100%;
@@ -112,13 +157,52 @@
     box-shadow: 0 0 0, 0 0 5px inset gray;
     transition-duration: 0.025s;
 }
-.tile{
+.tile1{
   padding: 5px;
+}
+.tile2{
+  display:flex;
+flex-wrap:wrap;
+justify-content:center;
+align-items:center;
+margin-bottom: 12px;
+column-gap:25px;
+}
+.text{
+  width: 50%;
+  height: 130px;
+  background-color: #F6F6F6;
+  text-align: justify;
+  box-shadow: 0px 0px 7px gray, 0 0 2px inset gray;
+  border-radius: 16px;
+  padding: 10px;
+}
+.photo1{
+  width: 30%;
+}
+.photo1 img{
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0px 0px 7px gray, 0 0 2px inset gray;
+  border-radius: 16px;
+}
+.photo2{
+  width: 30%;
+}
+.photo2 img{
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0px 0px 7px gray, 0 0 2px inset gray;
+  border-radius: 16px;
 }
 </style>
 <script lang="ts">
-
-export default {
+import {defineComponent} from 'vue'
+import TimeHubClient from '../axios-client'
+import store from '../store'
+export default defineComponent({
   components: {},
 
   setup(): { pageName: string } {
@@ -127,5 +211,14 @@ export default {
       pageName: pageName,
     };
   },
-};
+data(){
+    return {username:'',password:'',error:'', auth:false}
+  },
+  methods:{
+    login(){
+      const dane = {username:this.username,password:this.password}
+      TimeHubClient.post('https://projekt-timehub.herokuapp.com/dj_rest_auth/login/',dane).then(res => { store.dispatch('saveUser',res.data.user);store.dispatch('saveToken',res.data.accesss_token);this.auth = store.getters.getAuth }).catch(err => {this.error = 'Konto nie istnieje'})
+    }
+  },
+});
 </script>
