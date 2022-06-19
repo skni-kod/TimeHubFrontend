@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Kanban',
     component: () => import(/* webpackChunkName: "kanban" */ '../views/KanbanPage.vue')
   },
+  {
+    path: '/statistics',
+    name: 'Statistics',
+    component: () => import(/* webpackChunkName: "dashboard" */ '../views/StatisticsPage.vue')
+  },
 ]
 
 const router = createRouter({

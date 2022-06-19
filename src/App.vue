@@ -14,6 +14,9 @@
       <a href="\kanban">
         <div class="NavButton">Kanban</div>
       </a>
+      <a href="\statistics">
+        <div class="NavButton">Statistics</div>
+      </a>
     </div>
     <div class="NavLoginDiv">
       <a href="\">
