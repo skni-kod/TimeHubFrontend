@@ -32,6 +32,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  // overflow-y: hidden; // this needs to be addressed
 }
 
 #app {
@@ -44,6 +45,8 @@
 
 #NavBar {
   display: flex;
+  height: auto;
+  width: 100%;
   flex-direction: row;
   flex-grow: 0;
   background-color: white;
@@ -51,6 +54,8 @@
   place-items: center;
   background-repeat: no-repeat;
   box-shadow: 0 1px 10px lightgray;
+  position: fixed;
+  z-index: 10000;
   a {
     display: flex;
 
