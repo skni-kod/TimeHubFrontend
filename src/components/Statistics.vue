@@ -1,24 +1,24 @@
 <template>
 
-<h1>User's statistics</h1>
+<h1>Statystyki Użytkownika</h1>
   <div class="chartsWrapper">
 
     <div class="leftChartWrapper">
-      <h2>Aktualne taski</h2>
+      <h2>Aktualne zadania</h2>
       <h3><br></h3>
         <canvas id ="leftChart">To jest lewy wykres</canvas>
     </div>
 
     <div class="rightChartWrapper">
-      <h2>Podział tasków na kanbany</h2>
+      <h2>Podział zadań na tablice</h2>
       <h3>w ciągu ostatnich 7 dni</h3>
          <canvas id ="rightChart">To jest prawy wykres</canvas>
     </div>
 
     <div class="bottomWrapper">
-      <h2>Ilość wykonanych tasków w przeciągu ostatnich 7 dni</h2>
-      <h3><br></h3>
-        <canvas id ="bottomChart">To jest prawy wykres</canvas>        
+      <h2>Ilość wykonanych zadań</h2>
+      <h3>w przeciągu ostatnich 7 dni</h3>
+        <canvas id ="bottomChart">To jest dolny wykres</canvas>        
     </div>
     
   </div>
@@ -26,32 +26,24 @@
 
 <script lang="ts">
 import Chart from 'chart.js/auto';
-import 'chartjs-plugin-style';
-
+import axios from 'axios'
 
 export default {
-  props:{
-    zmienna: Array,
-    zmienna2: Array
-},
-  /*{
-    test: [],
-    test3: String,
-    zmienna: String
-  },*/
-  
-   mounted() {
-    console.log("Zrobione: "+this.zmienna);
-    console.log("W trakcie: "+this.zmienna2);
-    const leftChartPlace:any = document.getElementById('leftChart')!;
-    const rightChartPlace:any = document.getElementById('rightChart')!;
-    const bottomChartPlace:any = document.getElementById('bottomChart')!;
 
-  const randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
-  const randomRGB = () => `rgb(${randomNum()}, ${randomNum()}, ${randomNum()}, 0.5)`;
+  async created() {
+    const { data } = await axios.get("https://projekt-timehub.herokuapp.com/api/statystykaNotatkiSkonczoneAktywne7Dni/");
+    let zrobione: Promise<void> = (data.zrobione+2); //+1 jest dla testu xd
+    let wtrakcie: Promise<void> = (data.w_trakcie+3);
+    
+    const leftChartPlace:any = document.getElementById('leftChart');
+    const rightChartPlace:any = document.getElementById('rightChart');
+    const bottomChartPlace:any = document.getElementById('bottomChart');
 
+    
+    const randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
+    const randomRGB = () => `rgb(${randomNum()}, ${randomNum()}, ${randomNum()}, 0.5)`;
 
-    var optionsLeft = {
+  var optionsLeft = {
       maintainAspectRatio: false,
       responsive : true,
         layout: {
@@ -78,6 +70,7 @@ export default {
 
     };
 
+    
     var optionsBottom = {
       plugins: {
             legend: {
@@ -112,12 +105,12 @@ export default {
       }
     };
 
-    const leftChart = new Chart(leftChartPlace, {
+  const leftChart = new Chart(leftChartPlace, {
     type: 'doughnut',
     data: {
-        labels: [this.zmienna, this.zmienna2],
+        labels: ["Zrobione: "+zrobione, "W trakcie: "+wtrakcie],
         datasets: [{
-            data: [2,5],
+            data: [zrobione,wtrakcie],
             backgroundColor: [
                 randomRGB(),
                 randomRGB()
@@ -132,8 +125,7 @@ export default {
     options: optionsLeft
 });
 
-
-    const rightChart = new Chart(rightChartPlace, {
+const rightChart = new Chart(rightChartPlace, {
     type: 'doughnut',
     data: {
         labels: ['DaftCode', 'Skyware', 'Rocket Launcher'],
@@ -154,7 +146,6 @@ export default {
     },
     options: optionsRight
 });
-
 
 const bottomChart = new Chart(bottomChartPlace, {
     type: 'bar',
@@ -183,16 +174,18 @@ const bottomChart = new Chart(bottomChartPlace, {
             borderWidth: 1
         }]
     },
+    
     options: optionsBottom
 });
 
-  }
+
+  },
 };
 
 </script>
 
 
-<style>
+<style lang="scss">
 .chartsWrapper { /* glowny container na wykresy */
   width: 80%;
   height: 65vh;
