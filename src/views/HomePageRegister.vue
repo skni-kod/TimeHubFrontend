@@ -1,29 +1,36 @@
 <template>
   <div class="mainpanel" v-if="!auth">
-    <div class="square" v-if="x=1">
+    <div class="square" >
       <div class="heading">
         <h1>TimeHUB</h1>
       </div>
       <div class = "placeholder">
-        <input class="login" v-model="username" type="text" placeholder="Login"/>
+        <input class="login" v-model="login" type="text" placeholder="Login"/>
       </div>
       <div style="clear:both;"></div>
       <div class = "placeholder">
-        <input class="haslo" v-model="password" type="password" placeholder="Hasło"/>
+        <input class="haslo" v-model="email" type="email" placeholder="Email"/>
       </div>
+          <div class = "placeholder">
+        <input class="login" v-model="password" type="password" placeholder="Hasło"/>
+      </div>
+      <div style="clear:both;"></div>
+      <div class = "placeholder">
+        <input class="haslo" v-model="password_confirm" type="password" placeholder="Powtórz hasło"/>
+      </div>
+      <p class="error">{{ error}}</p>
       <div class="button1">
-        <button class="loginbutton" type="button" @click="login">
-          <h4>Zaloguj się</h4>
+        <button class="loginbutton" type="button" @click="register">
+          <h4>Zarejestruj się</h4>
         </button>
       </div>
-      <p>{{error}}</p>
         <div class="underbutton">
           <div class="tile1">
-            Nie jesteś zarejestrowany?
+            Jesteś już zarejestrowany?
           </div>
-          <div class="tile1">
-            <button class="changebutton" type="button" onclick="window.location.href='/register'">
-              Zarejestruj się teraz
+          <div class="tile">
+            <button class="changebutton" type="button" onclick="window.location.href='/'">
+              Zaloguj się
             </button>
           </div>
         </div> 
@@ -63,7 +70,7 @@
 .mainpanel{
   background-color: white;
   width: 100%;
-  height: 400px;
+  height: auto;
   padding: 15px;
 }
 .description{
@@ -78,19 +85,20 @@
   align: center;
   width: 600px;
   height: auto;
+  background-color: #F6F6F6;
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
-  background-color: #F6F6F6;
   box-shadow: 0px 0px 7px gray, 0 0 2px inset gray;
   border-radius: 16px;
   padding:10px;
 }
+.error{
+  color:red
+}
 .heading{
   width: 100%;
   height: 15%;
-  padding: 10px;
-  margin-bottom: 5px;
 }
 ::placeholder {
   font-size: 1.2em;
@@ -121,7 +129,7 @@
 }
 .loginbutton {
     border: 0;
-    width: 200px;
+    width: 250px;
     line-height: 2;
     padding: 0 20px;
     font-size: 1.5rem;
@@ -199,9 +207,9 @@ column-gap:25px;
 }
 </style>
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
 import TimeHubClient from '../axios-client'
-import store from '../store'
+import router from '../router'
 export default defineComponent({
   components: {},
 
@@ -210,15 +218,16 @@ export default defineComponent({
     return {
       pageName: pageName,
     };
-  },
-data(){
-    return {username:'',password:'',error:'', auth:false}
+  },  
+  data(){
+    return {login:'',password:'',email:'',password_confirm:'', error:''}
   },
   methods:{
-    login(){
-      const dane = {username:this.username,password:this.password}
-      TimeHubClient.post('https://projekt-timehub.herokuapp.com/dj_rest_auth/login/',dane).then(res => { store.dispatch('saveUser',res.data.user);store.dispatch('saveToken',res.data.accesss_token);this.auth = store.getters.getAuth }).catch(err => {this.error = 'Konto nie istnieje'})
+    register(){
+      const dane = {username:this.login,email:this.email, password1:this.password, password2:this.password_confirm}
+      TimeHubClient.post('https://projekt-timehub.herokuapp.com/dj_rest_auth/registration/',dane).then(res => { router.push('/')}).catch(err => {this.error = 'Sprawdź podane dane'})
     }
   },
+
 });
 </script>

@@ -18,13 +18,18 @@
         <div class="NavButton">Statistics</div>
       </a>
     </div>
-    <div class="NavLoginDiv">
-      <router-link to="/">
+    <div class="NavLoginDiv" v-if="!auth">
+      <a href="\">
         <div class="NavButton">Log in</div>
-      </router-link>
-      <router-link to="/">
+      </a>
+      <router-link to="\register">
         <div class="NavButton">Register</div>
       </router-link>
+    </div>
+    <div class="NavLoginDiv" v-else>
+      <a href="\" @click="logout">
+        <div class="NavButton">Log out</div>
+      </a>
     </div>
   </nav>
   <router-view />
@@ -95,3 +100,27 @@
   margin-right: 16px;
 }
 </style>
+
+<script lang="ts">
+import {defineComponent} from 'vue'
+import TimeHubClient from '../axios-client'
+import store from './store'
+import {mapGetters} from "vuex"
+export default defineComponent({
+  components: {},
+
+  setup(): { pageName: string } {
+    const pageName = "home";
+    return {
+      pageName: pageName,
+    };
+  },
+
+  methods:{
+    logout:()=>{
+      store.dispatch('logout')
+    },
+  },
+computed:{ ...mapGetters({auth:'getAuth'})}
+})
+</script>
