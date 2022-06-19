@@ -5,26 +5,26 @@
     </div>
 
     <div class="NavButtonsDiv">
-      <a href="\dashboard">
+      <router-link to="/dashboard">
         <div class="NavButton">Dashboard</div>
-      </a>
-      <a href="\calendar">
+      </router-link>
+      <router-link to="/calendar">
         <div class="NavButton">Calendar</div>
-      </a>
-      <a href="\kanban">
+      </router-link>
+      <router-link to="/kanban">
         <div class="NavButton">Kanban</div>
-      </a>
+      </router-link>
       <a href="\statistics">
         <div class="NavButton">Statistics</div>
       </a>
     </div>
     <div class="NavLoginDiv">
-      <a href="\">
+      <router-link to="/">
         <div class="NavButton">Log in</div>
-      </a>
-      <a href="\">
+      </router-link>
+      <router-link to="/">
         <div class="NavButton">Register</div>
-      </a>
+      </router-link>
     </div>
   </nav>
   <router-view />

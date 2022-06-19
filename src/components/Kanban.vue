@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<style lang="scss">
+<style scoped>
 .kanban {
   display: flex;
   flex-direction: column;
