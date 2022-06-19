@@ -33,8 +33,8 @@
           </button>
         </div>
         <div class="kontenerZawartosciKolumny">
-          <NotatkaVue></NotatkaVue>
-          <button class="kursorDodajacyZawartoscKolumny">
+          <NotatkaVue note="{note}" v-for="note in notes" :key="note.id"/>
+          <button class="kursorDodajacyZawartoscKolumny" v-on:click="utworzNotatke">
             <div class="plusKursoraDodajacegoZawartoscKolumny">+</div>
             <div class="tekstKursoraDodajacegoZawartoscKolumny">Dodaj nową notatkę</div>
           </button>
@@ -225,19 +225,17 @@
 }
 </style>
 
-<script lang="ts">
+<script setup lang="ts">
+import {ref} from 'vue';
 import NotatkaVue from "./Notatka.vue";
+  let count = 0;
+  const kanbanTitle = "Kanban Title Placeholder";
+  const utworzNotatke = () => {
+    notes.value.push({id: count, tytul: "Notatka", zawartosc: "ABC"});
+    count++;
+    console.log(notes)
+  }
+  const notes = ref(); 
 
-export default {
-  components: {
-    NotatkaVue,
-  },
-
-  setup(): { kanbanTitle: string } {
-    const constKanbanTitle = "Kanban Title Placeholder";
-    return {
-      kanbanTitle: constKanbanTitle,
-    };
-  },
-};
 </script>
+
