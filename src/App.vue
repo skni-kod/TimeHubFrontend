@@ -5,23 +5,26 @@
     </div>
 
     <div class="NavButtonsDiv">
-      <a href="\dashboard">
+      <router-link to="/dashboard">
         <div class="NavButton">Dashboard</div>
-      </a>
-      <a href="\calendar">
+      </router-link>
+      <router-link to="/calendar">
         <div class="NavButton">Calendar</div>
-      </a>
-      <a href="\kanban">
+      </router-link>
+      <router-link to="/kanban">
         <div class="NavButton">Kanban</div>
+      </router-link>
+      <a href="\statistics">
+        <div class="NavButton">Statistics</div>
       </a>
     </div>
     <div class="NavLoginDiv" v-if="!auth">
       <a href="\">
         <div class="NavButton">Log in</div>
       </a>
-      <a href="\register">
+      <router-link to="\register">
         <div class="NavButton">Register</div>
-      </a>
+      </router-link>
     </div>
     <div class="NavLoginDiv" v-else>
       <a href="\" @click="logout">
@@ -37,6 +40,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  // overflow-y: hidden; // this needs to be addressed
 }
 
 #app {
@@ -49,6 +53,8 @@
 
 #NavBar {
   display: flex;
+  height: auto;
+  width: 100%;
   flex-direction: row;
   flex-grow: 0;
   background-color: white;
@@ -56,6 +62,8 @@
   place-items: center;
   background-repeat: no-repeat;
   box-shadow: 0 1px 10px lightgray;
+  position: fixed;
+  z-index: 10000;
   a {
     display: flex;
 

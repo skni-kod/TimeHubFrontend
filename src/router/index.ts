@@ -20,9 +20,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/kanban',
     name: 'Kanban',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "kanban" */ '../views/KanbanPage.vue')
   },
   {
@@ -32,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "kanban" */ '../views/HomePageRegister.vue')
+  },
+  {
+    path: '/statistics',
+    name: 'Statistics',
+    component: () => import(/* webpackChunkName: "dashboard" */ '../views/StatisticsPage.vue')
   },
 ]
 
