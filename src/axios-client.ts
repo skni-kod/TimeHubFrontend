@@ -4,7 +4,7 @@ const TimeHubClient = axios.create({
     baseURL: "https://projekt-timehub.herokuapp.com/api/",
     timeout: 1000,
     headers: {
-      "Content-Type": "application/json",
+      //"Content-Type": "application/json",
   
     },
   });

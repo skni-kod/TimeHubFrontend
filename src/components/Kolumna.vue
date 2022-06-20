@@ -35,50 +35,29 @@ onBeforeMount(async () => {
 
 async function utworzNotatke() {
   const zmiennaCzasowa = new Date();
-  const obecnyCzas =
-    zmiennaCzasowa.getFullYear() +
-    "-" +
-    zmiennaCzasowa.getMonth() +
-    1 +
-    "-" +
-    zmiennaCzasowa.getDate() +
-    "T" +
-    zmiennaCzasowa.getHours() +
-    ":" +
-    zmiennaCzasowa.getMinutes() +
-    ":" +
-    zmiennaCzasowa.getSeconds() +
-    "." +
-    zmiennaCzasowa.getMilliseconds() +
-    "Z";
-  const czasZakonczenia =
-    zmiennaCzasowa.getFullYear() +
-    "-" +
-    zmiennaCzasowa.getMonth() +
-    1 +
-    "-" +
-    zmiennaCzasowa.getDate() +
-    "T" +
-    zmiennaCzasowa.getHours() +
-    ":" +
-    zmiennaCzasowa.getMinutes() +
-    ":" +
-    zmiennaCzasowa.getSeconds() +
-    "." +
-    zmiennaCzasowa.getMilliseconds() +
-    1 +
-    "Z";
+  Intl.DateTimeFormat("default", { dateStyle: "long" }).format(zmiennaCzasowa);
+
   const noteInitResponse = await TimeHubClient.post("notatka/", {
     kolumna: props.id,
-    data_stworzenia: obecnyCzas,
+    data_stworzenia: zmiennaCzasowa,
     czy_zrobione: false,
     czy_wazne: false,
-    zawartosc: "",
-    data_rozpoczecia: czasZakonczenia,
-    stworzone_przez: 4,
+    zawartosc: "Napisz coś...",
+    data_rozpoczecia: zmiennaCzasowa,
+    data_zakonczenia: zmiennaCzasowa,
+    stworzone_przez: 3,
   });
   notes.value.push(noteInitResponse.data);
   console.log(notes.value);
+}
+
+async function usunKolumne() {
+  const noteDeleteResponse = await TimeHubClient.delete("notatka/", {
+    data: {
+      id: props.id,
+    },
+  });
+  notes.value.filter((note) => !(note.id != props.id));
 }
 </script>
 
