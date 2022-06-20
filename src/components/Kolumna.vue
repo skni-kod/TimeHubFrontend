@@ -1,3 +1,87 @@
+<script setup lang="ts">
+import { ref, defineProps, onBeforeMount } from "vue";
+import NotatkaVue from "./Notatka.vue";
+import TimeHubClient from "@/axios-client";
+
+const props = defineProps<{
+  id: number;
+  tytul: string;
+}>();
+
+type Notka = {
+  id: number;
+  kolumna: number;
+  data_stworzenia: string;
+  czy_zrobione: boolean;
+  czy_wazne: boolean;
+  zawartosc: string;
+  data_rozpoczecia: string;
+  data_zakonczenia: string;
+  stworzone_przez: number;
+};
+
+const notes = ref<Notka[]>([]);
+onBeforeMount(async () => {
+  try {
+    const noteInitResponse = await TimeHubClient.get("notatka/");
+    //console.log(noteInitResponse.data);
+    noteInitResponse.data.forEach((note: Notka) => {
+      if (note.kolumna === props.id) notes.value.push(note);
+    });
+  } catch (error) {
+    console.log("Błąd przy wpisywaniu notatek do kolumny: " + props.id + " \n" + error);
+  }
+});
+
+async function utworzNotatke() {
+  const zmiennaCzasowa = new Date();
+  const obecnyCzas =
+    zmiennaCzasowa.getFullYear() +
+    "-" +
+    zmiennaCzasowa.getMonth() +
+    1 +
+    "-" +
+    zmiennaCzasowa.getDate() +
+    "T" +
+    zmiennaCzasowa.getHours() +
+    ":" +
+    zmiennaCzasowa.getMinutes() +
+    ":" +
+    zmiennaCzasowa.getSeconds() +
+    "." +
+    zmiennaCzasowa.getMilliseconds() +
+    "Z";
+  const czasZakonczenia =
+    zmiennaCzasowa.getFullYear() +
+    "-" +
+    zmiennaCzasowa.getMonth() +
+    1 +
+    "-" +
+    zmiennaCzasowa.getDate() +
+    "T" +
+    zmiennaCzasowa.getHours() +
+    ":" +
+    zmiennaCzasowa.getMinutes() +
+    ":" +
+    zmiennaCzasowa.getSeconds() +
+    "." +
+    zmiennaCzasowa.getMilliseconds() +
+    1 +
+    "Z";
+  const noteInitResponse = await TimeHubClient.post("notatka/", {
+    kolumna: props.id,
+    data_stworzenia: obecnyCzas,
+    czy_zrobione: false,
+    czy_wazne: false,
+    zawartosc: "",
+    data_rozpoczecia: czasZakonczenia,
+    stworzone_przez: 4,
+  });
+  notes.value.push(noteInitResponse.data);
+  console.log(notes.value);
+}
+</script>
+
 <template>
   <div class="kontenerKolumny">
     <div class="kontenerGornyKolumny">
@@ -31,8 +115,15 @@
     </div>
     <div class="kontenerZawartosciKolumny">
       <NotatkaVue
-        :tytul="note.tytul"
+        :id="note.id"
+        :kolumna="note.kolumna"
+        :data_stworzenia="note.data_stworzenia"
+        :czy_zrobione="note.czy_zrobione"
+        :czy_wazne="note.czy_wazne"
         :zawartosc="note.zawartosc"
+        :data_rozpoczecia="note.data_rozpoczecia"
+        :data_zakonczenia="note.data_zakonczenia"
+        :stworzone_przez="note.stworzone_przez"
         note="{note}"
         v-for="(note, index) in notes"
         :key="index"
@@ -166,23 +257,3 @@
   font-weight: 900;
 }
 </style>
-
-<script setup lang="ts">
-import { ref, defineProps } from "vue";
-import NotatkaVue from "./Notatka.vue";
-
-const props = defineProps({
-  tytul: String,
-});
-
-type Notka = {
-  tytul: string;
-  zawartosc: string;
-};
-
-const notes = ref<Notka[]>([]);
-const utworzNotatke = () => {
-  notes.value.push({ tytul: "Notatka", zawartosc: "ABC" });
-  console.log(notes.value);
-};
-</script>

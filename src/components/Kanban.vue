@@ -1,8 +1,58 @@
+<script setup lang="ts">
+import { ref, defineProps, onBeforeMount } from "vue";
+import Kolumna from "./Kolumna.vue";
+import axios from "axios";
+
+const TimeHubClient = axios.create({
+  baseURL: "https://projekt-timehub.herokuapp.com/api/",
+  timeout: 1000,
+  headers: {
+    // "Content-Type": "application/json",
+  },
+});
+
+const props = defineProps<{
+  id: number;
+  tytul: string;
+  czy_zautomatyzowane: boolean;
+}>();
+
+type Kol = {
+  id: number;
+  tablica: number;
+  tytul: string;
+};
+
+const cols = ref<Kol[]>([]);
+onBeforeMount(async () => {
+  const colsInitResponse = await TimeHubClient.get("tablicaKolumny/2/");
+  console.log(colsInitResponse.data);
+  colsInitResponse.data.forEach((col: Kol) => {
+    cols.value.push(col);
+  });
+});
+
+async function utworzKolumne() {
+  const response = await TimeHubClient.post("kolumny/", {
+    tablica: props.id,
+    tytul: "Kolumna",
+  });
+  cols.value.push(response.data);
+  console.log(response.data);
+}
+</script>
+
 <template>
   <div class="kanban">
     <div class="kontenerTytulowy">{{ props.tytul }}</div>
     <div class="kontenerWszystkichKolumn">
-      <Kolumna :tytul="col.tytul" col="{col}" v-for="col in cols" :key="col.id" />
+      <Kolumna
+        :id="col.id"
+        :tytul="col.tytul"
+        col="{col}"
+        v-for="col in cols"
+        :key="col.id"
+      />
       <button class="kursorDodajacyKolumny" v-on:click="utworzKolumne">
         <div class="plusKursoraDodajacegoZawartoscKolumny">+</div>
         <div class="tekstKursoraDodajacegoZawartoscKolumny">Dodaj nową kolumnę</div>
@@ -11,7 +61,7 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .kanban {
   display: flex;
   flex-direction: column;
@@ -67,47 +117,3 @@
   }
 }
 </style>
-
-<script setup lang="ts">
-import { ref, defineProps, onBeforeMount } from "vue";
-import Kolumna from "./Kolumna.vue";
-import axios from "axios";
-
-const TimeHubClient = axios.create({
-  baseURL: "https://projekt-timehub.herokuapp.com/api/",
-  timeout: 1000,
-  headers: {
-    // "Content-Type": "application/json",
-  },
-});
-
-const props = defineProps<{
-  id: number;
-  tytul: string;
-  czy_zautomatyzowane: boolean;
-}>();
-
-type Kol = {
-  id: number;
-  tablica: number;
-  tytul: string;
-};
-
-const cols = ref<Kol[]>([]);
-onBeforeMount(async () => {
-  const colsInitResponse = await TimeHubClient.get("tablicaKolumny/2/");
-  console.log(colsInitResponse.data);
-  colsInitResponse.data.forEach((col: Kol) => {
-    cols.value.push(col);
-  });
-});
-
-async function utworzKolumne() {
-  const response = await TimeHubClient.post("kolumny/", {
-    tablica: props.id,
-    tytul: "Kolumna",
-  });
-  cols.value.push(response.data);
-  console.log(response.data);
-}
-</script>

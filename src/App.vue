@@ -14,22 +14,22 @@
       <router-link to="/kanban">
         <div class="NavButton">Kanban</div>
       </router-link>
-      <a href="\statistics">
+      <router-link to="/statistics">
         <div class="NavButton">Statistics</div>
-      </a>
+      </router-link>
     </div>
     <div class="NavLoginDiv" v-if="!auth">
-      <a href="\">
+      <router-link to="/">
         <div class="NavButton">Log in</div>
-      </a>
-      <router-link to="\register">
+      </router-link>
+      <router-link to="/register">
         <div class="NavButton">Register</div>
       </router-link>
     </div>
     <div class="NavLoginDiv" v-else>
-      <a href="\" @click="logout">
+      <router-link to="/" @click="logout">
         <div class="NavButton">Log out</div>
-      </a>
+      </router-link>
     </div>
   </nav>
   <router-view />
@@ -64,6 +64,7 @@
   box-shadow: 0 1px 10px lightgray;
   position: fixed;
   z-index: 10000;
+  top: 0px;
   a {
     display: flex;
 
@@ -102,10 +103,10 @@
 </style>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
-import TimeHubClient from '../axios-client'
-import store from './store'
-import {mapGetters} from "vuex"
+import { defineComponent } from "vue";
+import TimeHubClient from "./axios-client";
+import store from "./store";
+import { mapGetters } from "vuex";
 export default defineComponent({
   components: {},
 
@@ -116,11 +117,11 @@ export default defineComponent({
     };
   },
 
-  methods:{
-    logout:()=>{
-      store.dispatch('logout')
+  methods: {
+    logout: () => {
+      store.dispatch("logout");
     },
   },
-computed:{ ...mapGetters({auth:'getAuth'})}
-})
+  computed: { ...mapGetters({ auth: "getAuth" }) },
+});
 </script>
