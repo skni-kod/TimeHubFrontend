@@ -12,13 +12,17 @@ const props = defineProps<{
   data_zakonczenia: string;
   stworzone_przez: number;
 }>();
+
+async function usunNotatke() {
+  const noteDeleteResponse = await TimeHubClient.delete("notatka/" + props.id + "/");
+}
 </script>
 
 <template>
   <div class="kontenerNotatki">
     <div class="kontenerTytulowyNotatki">
       <div class="czyWaznePasek" :class="{ aktywny: props.czy_wazne }"></div>
-      <button class="przyciskUsunieciaNotatki">
+      <button class="przyciskUsunieciaNotatki" v-on:click="usunNotatke">
         <svg
           id="ikonkaPrzyciskuUsunieciaKolumny1"
           class="ikonaPrzyciskuUsunieciaKolumny"
