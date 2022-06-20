@@ -15,19 +15,37 @@ export default defineComponent({
     },
     beforeMount: async function() {
         try {
-            const response = await TimeHubClient.get(`tablicaUzytkownik/${this.user.pk}/`, {headers:{Authorization:`Bearer ${this.token}`}});
-            console.log(response.data)
+            const response = await TimeHubClient.get(`uzytkownikTablice/`, {headers:{Authorization:`Bearer ${this.token}`}});
             store.dispatch('getKanbany', response.data);
         } catch (error) {
             this.kanbany = "Nie można było pobrać danych"
-  }
+    }
     },
     data: () => {
         return {
             user: store.getters.getUser,
             token:store.getters.getToken,
-            kanbany: store.getters.getKanbany
+            kanbany: store.getters.getKanbany,
+            tytul: '',
+            czy_zautomatyzowane: false
         };
+    },
+    methods: {
+        stworzTablice: async function() {
+            try {
+                const response = await TimeHubClient.post(`tablice/`,
+                {
+                    tytul: this.tytul,
+                    czy_zautomatyzowane: this.czy_zautomatyzowane
+                },
+                {
+                    headers:{Authorization:`Bearer ${this.token}`}
+                });
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
     }
 });
 </script>
@@ -57,11 +75,19 @@ export default defineComponent({
         <div class="second">
             <h2>Twoje kanbany</h2>
             <div class="kanbany">
-                <div class="kanban">
+                <div class="kanban" v-for="kanban in kanbany" :key="kanban.tablica.id">
                     <router-link to="/kanban">
                         <img :src="require('../assets/kanban.png')" alt="" />
-                        <h3>Tytul</h3></router-link
-                    >
+                        <h3>{{kanban.tablica.tytul}}</h3>
+                    </router-link>
+                </div>
+
+                <div class="stworz">
+                    <h3>Stwórz tablicę</h3>
+                    <input type="text" placeholder="Nazwa tablicy" v-model="tytul"/><br/>
+                    <input type="checkbox" name="zautomatyzowane" id="zautomatyzowane" v-model="czy_zautomatyzowane">
+                    <label for="zautomatyzowane">Czy zautomatyzowane</label><br/>
+                    <input type="submit" value="Stwórz" @click="stworzTablice"/>
                 </div>
             </div>
         </div>
@@ -114,13 +140,24 @@ export default defineComponent({
                 text-align: center;
                 justify-content: center;
                 margin: 30px;
+                .stworz{
+                    background: darken($color: #ffff, $amount: 30);
+                    max-width: 240px;
+                    height: auto;
+                    width: 100%;
+                    padding: 18px 32px;
+                    border-radius: 16px;
+                    input{
+                        margin: 5px;
+                    }
+                }
                 .kanban {
                     display: flex;
                     flex-direction: column;
                     row-gap: 10px;
+                    margin: 10px;
                     img {
                         background: darken($color: #ffff, $amount: 30);
-
                         max-width: 120px;
                         height: auto;
                         width: 100%;
