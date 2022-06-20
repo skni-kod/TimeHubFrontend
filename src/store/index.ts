@@ -9,7 +9,8 @@ export default createStore({
       email: '',
       first_name:'',
       last_name:'',
-      }
+    },
+    kanbany: []
   },
   mutations: {
     setUser(state, user){
@@ -21,12 +22,16 @@ export default createStore({
     logout(state){
       state.token = "";
       state.user = {
-        username:'',
+        username: '',
         pk: '',
         email: '',
-        first_name:'',
-        last_name:'',
-        };
+        first_name: '',
+        last_name: '',
+      };
+      state.kanbany = []
+    },
+    setKanbany(state, kanbany) {
+      state.kanbany = kanbany
     }
   },
   actions: {
@@ -38,11 +43,15 @@ export default createStore({
     },
     logout({commit}){
       commit('logout');
+    },
+    getKanbany({ commit }, kanbany) {
+      commit('setKanbany', kanbany)
     }
   },
   getters: {
     getAuth: (state) => {return state.token != ''},
     getToken: (state) => {return state.token},
-    getUser: (state) => { return state.user}
+    getUser: (state) => { return state.user; },
+    getKanbany: (state) => {return state.kanbany}
   }
 })
