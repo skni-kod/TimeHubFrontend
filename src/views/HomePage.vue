@@ -1,6 +1,6 @@
 <template>
   <div class="mainpanel" v-if="!auth">
-    <div class="square" v-if="(x = 1)">
+    <div class="square">
       <div class="heading">
         <h1>TimeHUB</h1>
       </div>
@@ -160,12 +160,12 @@
 }
 .tile2 {
   display: flex;
-  flex-wrap: wrap;
+  flex: 1 1 auto;
   justify-content: center;
   align-items: center;
   margin-bottom: 12px;
   column-gap: 25px;
-  height: fit-content;
+  min-height: fit-content;
 }
 .text {
   width: 50%;

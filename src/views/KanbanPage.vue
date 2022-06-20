@@ -30,7 +30,6 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
 import TimeHubClient from "@/axios-client";
-import axios from "axios";
 import Kanban from "../components/Kanban.vue";
 
 interface Tablica {

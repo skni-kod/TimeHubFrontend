@@ -3,6 +3,7 @@ import { ref, defineProps, onBeforeMount } from "vue";
 import Kolumna from "./Kolumna.vue";
 import axios from "axios";
 import store from "@/store";
+import KomponentOpcji from "./KomponentOpcji.vue";
 
 const TimeHubClient = axios.create({
   baseURL: "https://projekt-timehub.herokuapp.com/api/",
@@ -65,6 +66,7 @@ async function utworzKolumne() {
         <div class="tekstKursoraDodajacegoZawartoscKolumny">Dodaj nową kolumnę</div>
       </button>
     </div>
+    <KomponentOpcji :id="props.id" />
   </div>
 </template>
 

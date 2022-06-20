@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, defineProps, onBeforeMount } from "vue";
-import NotatkaVue from "./Notatka.vue";
 import TimeHubClient from "@/axios-client";
 import store from "@/store";
+import Notatka from "./Notatka.vue";
 
 const props = defineProps<{
   id: number;
@@ -75,14 +75,12 @@ async function usunKolumne() {
           id="ikonkaPrzyciskuOpcjiKolumny1"
           class="ikonaPrzyciskuOpcjiKolumny"
           xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           version="1.1"
           x="0px"
           y="0px"
           width="32px"
           height="32px"
           viewBox="0 0 569.613 569.614"
-          xml:space="preserve"
         >
           <g>
             <g>
@@ -98,7 +96,7 @@ async function usunKolumne() {
       </button>
     </div>
     <div class="kontenerZawartosciKolumny">
-      <NotatkaVue
+      <Notatka
         :id="note.id"
         :kolumna="note.kolumna"
         :data_stworzenia="note.data_stworzenia"

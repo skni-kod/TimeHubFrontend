@@ -1,10 +1,12 @@
 <template>
   <nav id="NavBar">
     <div class="LogoDiv">
-      <h1>TimeHUB</h1>
+      <router-link to="/">
+        <h1>TimeHUB</h1>
+      </router-link>
     </div>
 
-    <div class="NavButtonsDiv">
+    <div class="NavButtonsDiv" v-if="auth">
       <router-link to="/dashboard">
         <div class="NavButton">Dashboard</div>
       </router-link>
@@ -69,9 +71,9 @@
     font-weight: bold;
     color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+    // &.router-link-exact-active {
+    //   color: #42b983;
+    // }
   }
 }
 
