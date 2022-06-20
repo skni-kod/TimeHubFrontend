@@ -69,7 +69,7 @@
 .description{
   width: 100%;
   align: center;
-  margin-top: 15px;
+  margin-top: 50px;
   background-color: #F6F6F6;
   box-shadow: 0px 0px 7px gray, 0 0 2px inset gray;
   padding: 10px;
@@ -217,7 +217,7 @@ data(){
   methods:{
     login(){
       const dane = {username:this.username,password:this.password}
-      TimeHubClient.post('https://projekt-timehub.herokuapp.com/dj_rest_auth/login/',dane).then(res => { store.dispatch('saveUser',res.data.user);store.dispatch('saveToken',res.data.accesss_token);this.auth = store.getters.getAuth }).catch(err => {this.error = 'Konto nie istnieje'})
+      TimeHubClient.post('https://projekt-timehub.herokuapp.com/dj_rest_auth/login/',dane).then(res => { store.dispatch('saveUser',res.data.user);store.dispatch('saveToken',res.data.access_token);console.log(res.data.access_token);this.auth = store.getters.getAuth }).catch(err => {this.error = 'Konto nie istnieje'})
     }
   },
 });
