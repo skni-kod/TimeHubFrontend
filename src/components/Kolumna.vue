@@ -2,6 +2,7 @@
 import { ref, defineProps, onBeforeMount } from "vue";
 import NotatkaVue from "./Notatka.vue";
 import TimeHubClient from "@/axios-client";
+import store from "@/store";
 
 const props = defineProps<{
   id: number;
@@ -26,7 +27,7 @@ onBeforeMount(async () => {
     const noteInitResponse = await TimeHubClient.get("notatka/");
     //console.log(noteInitResponse.data);
     noteInitResponse.data.forEach((note: Notka) => {
-      if (note.kolumna === props.id) notes.value.push(note);
+      if (note.kolumna == props.id) notes.value.push(note);
     });
   } catch (error) {
     console.log("Błąd przy wpisywaniu notatek do kolumny: " + props.id + " \n" + error);
@@ -36,17 +37,21 @@ onBeforeMount(async () => {
 async function utworzNotatke() {
   const zmiennaCzasowa = new Date();
   Intl.DateTimeFormat("default", { dateStyle: "long" }).format(zmiennaCzasowa);
-
-  const noteInitResponse = await TimeHubClient.post("notatka/", {
-    kolumna: props.id,
-    data_stworzenia: zmiennaCzasowa,
-    czy_zrobione: false,
-    czy_wazne: false,
-    zawartosc: "Napisz coś...",
-    data_rozpoczecia: zmiennaCzasowa,
-    data_zakonczenia: zmiennaCzasowa,
-    stworzone_przez: 3,
-  });
+  const noteInitResponse = await TimeHubClient.post(
+    "notatka/",
+    {
+      kolumna: props.id,
+      data_stworzenia: zmiennaCzasowa,
+      czy_zrobione: false,
+      czy_wazne: false,
+      zawartosc: "Napisz coś...",
+      data_rozpoczecia: zmiennaCzasowa,
+      data_zakonczenia: zmiennaCzasowa,
+    },
+    {
+      headers: { Authorization: `Bearer ${store.getters.getToken}` },
+    }
+  );
   notes.value.push(noteInitResponse.data);
   console.log(notes.value);
 }
@@ -104,8 +109,8 @@ async function usunKolumne() {
         :data_zakonczenia="note.data_zakonczenia"
         :stworzone_przez="note.stworzone_przez"
         note="{note}"
-        v-for="(note, index) in notes"
-        :key="index"
+        v-for="note in notes"
+        :key="note.id"
       />
       <button class="kursorDodajacyZawartoscKolumny" v-on:click="utworzNotatke">
         <div class="plusKursoraDodajacegoZawartoscKolumny">+</div>

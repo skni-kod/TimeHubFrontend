@@ -2,6 +2,7 @@
 import { ref, defineProps, onBeforeMount } from "vue";
 import Kolumna from "./Kolumna.vue";
 import axios from "axios";
+import store from "@/store";
 
 const TimeHubClient = axios.create({
   baseURL: "https://projekt-timehub.herokuapp.com/api/",
@@ -25,7 +26,7 @@ type Kol = {
 
 const cols = ref<Kol[]>([]);
 onBeforeMount(async () => {
-  const colsInitResponse = await TimeHubClient.get("tablicaKolumny/2/");
+  const colsInitResponse = await TimeHubClient.get("tablicaKolumny/13/");
   console.log(colsInitResponse.data);
   colsInitResponse.data.forEach((col: Kol) => {
     cols.value.push(col);
@@ -33,10 +34,16 @@ onBeforeMount(async () => {
 });
 
 async function utworzKolumne() {
-  const response = await TimeHubClient.post("kolumny/", {
-    tablica: props.id,
-    tytul: "Kolumna",
-  });
+  const response = await TimeHubClient.post(
+    "kolumny/",
+    {
+      tablica: props.id,
+      tytul: "Kolumna",
+    },
+    {
+      headers: { Authorization: `Bearer ${store.getters.getToken}` },
+    }
+  );
   cols.value.push(response.data);
   console.log(response.data);
 }
