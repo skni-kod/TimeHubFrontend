@@ -11,9 +11,6 @@
       <router-link to="/calendar">
         <div class="NavButton">Calendar</div>
       </router-link>
-      <router-link to="/kanban">
-        <div class="NavButton">Kanban</div>
-      </router-link>
       <router-link to="/statistics">
         <div class="NavButton">Statistics</div>
       </router-link>

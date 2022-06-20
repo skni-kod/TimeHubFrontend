@@ -29,17 +29,9 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
+import TimeHubClient from "@/axios-client";
 import axios from "axios";
 import Kanban from "../components/Kanban.vue";
-
-const TimeHubClient = axios.create({
-  baseURL: "https://projekt-timehub.herokuapp.com/api/",
-  timeout: 1000,
-  headers: {
-    // "Content-Type": "application/json",
-    //Authenticator:  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU1NjY5Mjk4LCJpYXQiOjE2NTU2NjU2OTgsImp0aSI6ImRiNTMwY2Q5NzNiZjRjMzU5NDZjMjJhZjcyNzBmNzUzIiwidXNlcl9pZCI6M30.2IqixLmhkAJuqx82c6PKD4tyTJ2ryPXnppl9pHmw7vs",
-  },
-});
 
 interface Tablica {
   id: number;
@@ -55,7 +47,7 @@ let jsonTablicy = ref<Tablica>({
 
 onBeforeMount(async () => {
   try {
-    const response = await TimeHubClient.get("tablice/2/");
+    const response = await TimeHubClient.get("tablice/13/");
     jsonTablicy.value = response.data;
   } catch (error) {
     if (jsonTablicy.value == undefined) console.log("Błąd w pozyskaniu danych tablicy");
