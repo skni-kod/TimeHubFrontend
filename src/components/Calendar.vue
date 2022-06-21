@@ -29,18 +29,17 @@ const Demo = defineComponent({
     axios.get('https://projekt-timehub.herokuapp.com/api/uzytkownikNotatki/', {headers: {
         Authorization: 'Bearer ' + this.token,
       }}).then((Data)=>{
-    console.log(Data);
-    this.events = Data.data.map((e: event)=>{
-      return{
-      id: e.id,
-      title: e.zawartosc,
-      start: e.data_rozpoczecia,
-      end: e.data_zakonczenia,
-      allDay: true
-      }
-    });
+      this.calendarOptions.events = Data.data.map((e: event)=>{
+        return{
+        id: e.id,
+        title: e.zawartosc,
+        start: e.data_rozpoczecia,
+        end: e.data_zakonczenia,
+        allDay: true
+        }
+      });
   })
-  .catch(error=>console.log(error))
+  .catch(error=>console.log(error));
 },
 computed: { ...mapGetters({ token: "getToken" }) },
   data() {
@@ -58,7 +57,6 @@ computed: { ...mapGetters({ token: "getToken" }) },
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         initialView: 'dayGridMonth',
-        initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         editable: true,
         selectable: true,
         selectMirror: true,
@@ -77,6 +75,7 @@ computed: { ...mapGetters({ token: "getToken" }) },
       this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
     },
     handleDateSelect(selectInfo: DateSelectArg) {
+      console.log(this.currentEvents);
       let title = prompt('Podaj nazwe wydarzenia: ')
       let calendarApi = selectInfo.view.calendar
 
