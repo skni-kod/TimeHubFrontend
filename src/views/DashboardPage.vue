@@ -17,9 +17,10 @@ export default defineComponent({
         try {
             const response = await TimeHubClient.get(`uzytkownikTablice/`, {headers:{Authorization:`Bearer ${this.token}`}});
             store.dispatch('getKanbany', response.data);
+            this.kanbany = response.data;
         } catch (error) {
             this.kanbany = "Nie można było pobrać danych"
-    }
+        }
     },
     data: () => {
         return {
@@ -41,9 +42,17 @@ export default defineComponent({
                 {
                     headers:{Authorization:`Bearer ${this.token}`}
                 });
+                this.tytul = '';
+                this.czy_zautomatyzowane = false;
             }
             catch (error) {
                 console.log(error);
+            }
+            try {
+                const response = await TimeHubClient.get(`uzytkownikTablice/`, {headers:{Authorization:`Bearer ${this.token}`}});
+                this.kanbany = response.data;
+            } catch (error) {
+                this.kanbany = "Nie można było pobrać danych"
             }
         }
     }
