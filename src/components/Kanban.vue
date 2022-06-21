@@ -66,7 +66,6 @@ async function utworzKolumne() {
         <div class="tekstKursoraDodajacegoZawartoscKolumny">Dodaj nową kolumnę</div>
       </button>
     </div>
-    <KomponentOpcji :id="props.id" />
   </div>
 </template>
 

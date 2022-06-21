@@ -14,8 +14,6 @@ const props = defineProps<{
 <style lang="scss">
 .przyciemniaczOpcji {
   display: flex;
-  background-color: red;
-  box-shadow: 0 0 black;
   width: 100vw;
   height: 100vh;
 }
