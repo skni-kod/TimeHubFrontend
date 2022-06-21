@@ -8,20 +8,29 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { INITIAL_EVENTS, createEventId } from '@/event-utils'
 import { onMounted } from 'vue';
 import axios from 'axios';
+import event from '@/models/event'
+import store from "../store";
+import { mapGetters } from "vuex";
 
-/*
 const id = ref(1)
 
 const events = ref([
 
 ]);
 
-onMounted(() => {
-  axios.get('https://projekt-timehub.herokuapp.com/api/uzytkownikNotatki/', {headers: {
-        Authorization: 'Bearer ' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU1NzE0MzA0LCJpYXQiOjE2NTU3MTA3MDQsImp0aSI6IjRkMGM4MzMxMzdmMzQ0ODk4MWFkMDQyY2MwYTc5YmNlIiwidXNlcl9pZCI6Mn0.k0VO6hXkS15RIUKuKwOFlzZUrEx_9kW2BYelcRlqW5s",
-      }}).then(Data=>{
+
+
+
+const Demo = defineComponent({
+  components: {
+    FullCalendar,
+  },
+    created() {
+    axios.get('https://projekt-timehub.herokuapp.com/api/uzytkownikNotatki/', {headers: {
+        Authorization: 'Bearer ' + this.token,
+      }}).then((Data)=>{
     console.log(Data);
-    Demo.events = Data.data.map((e: React.ChangeEvent<HTMLInputElement>)=>{
+    this.events = Data.data.map((e: event)=>{
       return{
       id: e.id,
       title: e.zawartosc,
@@ -32,14 +41,11 @@ onMounted(() => {
     });
   })
   .catch(error=>console.log(error))
-})
-*/
-const Demo = defineComponent({
-  components: {
-    FullCalendar,
-  },
+},
+computed: { ...mapGetters({ token: "getToken" }) },
   data() {
     return {
+      events,
       calendarOptions: {
         plugins: [
           dayGridPlugin,
