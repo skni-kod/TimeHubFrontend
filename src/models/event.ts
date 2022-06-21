@@ -3,5 +3,5 @@ export default interface event{
     zawartosc: string,
     data_rozpoczecia: string,
     data_zakonczenia: string,
-    allDay: boolean
+    //allDay: boolean
 }
