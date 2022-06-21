@@ -74,31 +74,16 @@ computed: { ...mapGetters({ token: "getToken" }) },
     handleWeekendsToggle() {
       this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
     },
-    handleDateSelect(selectInfo: DateSelectArg) {
-      console.log(this.currentEvents);
-      let title = prompt('Podaj nazwe wydarzenia: ')
-      let calendarApi = selectInfo.view.calendar
-
-      calendarApi.unselect() // clear date selection
-
-      if (title) {
-        calendarApi.addEvent({
-          id: createEventId(),
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-          allDay: selectInfo.allDay
-        })
-      }
-    },
     handleEventClick(clickInfo: EventClickArg) {
+      //console.log(clickInfo);
       if (confirm(`Potwierdz usuniecie wydarzenia: '${clickInfo.event.title}'`)) {
         clickInfo.event.remove()
+        axios.delete(`https://projekt-timehub.herokuapp.com/api/notatka/${clickInfo.event._def.publicId}/`)
       }
     },
     handleEvents(events: EventApi[]) {
       this.currentEvents = events
-    },
+    },   
   }
 })
 export default Demo
