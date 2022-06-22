@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, defineEmits, ref } from "vue";
 import TimeHubClient from "@/axios-client";
+const emit = defineEmits(['zmianaNotatki']);
+
 const props = defineProps<{
   id: number;
   kolumna: number;
@@ -13,15 +15,29 @@ const props = defineProps<{
   stworzone_przez: number;
 }>();
 
+let tekstZawartosci = ref<string>("Napisz coś...");
+
 async function usunNotatke() {
   const noteDeleteResponse = await TimeHubClient.delete("notatka/" + props.id + "/");
+  emit('zmianaNotatki');
+}
+
+async function ustawWazne() {
+  const noteDeleteResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {czy_wazne: !props.czy_wazne});
+  emit('zmianaNotatki');
+}
+
+async function ustawZawartosc(val: string) {
+  console.log("ustawiono zawartość: " + tekstZawartosci.value)
+  const noteDeleteResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {zawartosc: val});
+  emit('zmianaNotatki');
 }
 </script>
 
 <template>
   <div class="kontenerNotatki">
     <div class="kontenerTytulowyNotatki">
-      <div class="czyWaznePasek" :class="{ aktywny: props.czy_wazne }"></div>
+      <button class="czyWaznePasek" :class="{ aktywny: props.czy_wazne }" @click="ustawWazne"></button>
       <button class="przyciskUsunieciaNotatki" v-on:click="usunNotatke">
         <svg
           id="ikonkaPrzyciskuUsunieciaKolumny1"
@@ -47,6 +63,8 @@ async function usunNotatke() {
       class="zawartoscNotatki"
       oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
       v-text="props.zawartosc"
+      v-model="tekstZawartosci"
+      @blur="ustawZawartosc(tekstZawartosci)"
     />
     <div class="kontenerCzasow">
       <span class="czasUtworzenia">Stworzono: {{ props.data_stworzenia }}</span>
@@ -93,6 +111,8 @@ async function usunNotatke() {
   border-radius: 16px;
   box-shadow: 0px 0px 2px gray, 0 0 7px inset gray;
   background-color: #f9f9f9; //#f94040;
+  border: 0px;
+  cursor:pointer;
 }
 
 .aktywny {

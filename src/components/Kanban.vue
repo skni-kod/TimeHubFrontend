@@ -4,14 +4,7 @@ import Kolumna from "./Kolumna.vue";
 import axios from "axios";
 import store from "@/store";
 import KomponentOpcji from "./KomponentOpcji.vue";
-
-const TimeHubClient = axios.create({
-  baseURL: "https://projekt-timehub.herokuapp.com/api/",
-  timeout: 1000,
-  headers: {
-    // "Content-Type": "application/json",
-  },
-});
+import TimeHubClient from "@/axios-client";
 
 const props = defineProps<{
   id: number;

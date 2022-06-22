@@ -23,16 +23,24 @@ type Notka = {
 
 const notes = ref<Notka[]>([]);
 onBeforeMount(async () => {
+  updateColumn();
+});
+
+async function updateColumn() {
   try {
     const noteInitResponse = await TimeHubClient.get("notatka/");
     //console.log(noteInitResponse.data);
     noteInitResponse.data.forEach((note: Notka) => {
+      notes.value.pop();
+    });
+    noteInitResponse.data.forEach((note: Notka) => {
+      console.log("Załadowano notatkę " + props.id + " w kolumnie: " + note.kolumna)
       if (note.kolumna == props.id) notes.value.push(note);
     });
   } catch (error) {
     console.log("Błąd przy wpisywaniu notatek do kolumny: " + props.id + " \n" + error);
   }
-});
+}
 
 async function utworzNotatke() {
   const zmiennaCzasowa = new Date();
@@ -109,6 +117,7 @@ async function usunKolumne() {
         note="{note}"
         v-for="note in notes"
         :key="note.id"
+        @zmianaNotatki="updateColumn"
       />
       <button class="kursorDodajacyZawartoscKolumny" v-on:click="utworzNotatke">
         <div class="plusKursoraDodajacegoZawartoscKolumny">+</div>
