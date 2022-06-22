@@ -56,8 +56,8 @@ async function utworzNotatke() {
   console.log(notes.value);
 }
 
-async function usunKolumne() {
-  const noteDeleteResponse = await TimeHubClient.delete("notatka/", {
+async function usunNotatke() {
+  await TimeHubClient.delete("notatka/", {
     data: {
       id: props.id,
     },

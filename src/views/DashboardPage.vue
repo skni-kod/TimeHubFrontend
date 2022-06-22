@@ -85,7 +85,7 @@ export default defineComponent({
             <h2>Twoje kanbany</h2>
             <div class="kanbany">
                 <div class="kanban" v-for="kanban in kanbany" :key="kanban.tablica.id">
-                    <router-link to="/kanban">
+                    <router-link :to='"/kanban/" + kanban.tablica.id'>
                         <img :src="require('../assets/kanban.png')" alt="" />
                         <h3>{{kanban.tablica.tytul}}</h3>
                     </router-link>

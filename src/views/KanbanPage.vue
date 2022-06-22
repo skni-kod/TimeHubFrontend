@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
+import {useRoute} from 'vue-router';
 import TimeHubClient from "@/axios-client";
 import Kanban from "../components/Kanban.vue";
 
@@ -44,9 +45,11 @@ let jsonTablicy = ref<Tablica>({
   czy_zautomatyzowane: false,
 });
 
+const route = useRoute();
+
 onBeforeMount(async () => {
   try {
-    const response = await TimeHubClient.get("tablice/13/");
+    const response = await TimeHubClient.get("tablice/" + route.params.id +"/");
     jsonTablicy.value = response.data;
   } catch (error) {
     if (jsonTablicy.value == undefined) console.log("Błąd w pozyskaniu danych tablicy");

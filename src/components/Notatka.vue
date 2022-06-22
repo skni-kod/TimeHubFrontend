@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 import TimeHubClient from "@/axios-client";
-const props = defineProps<{
-  id: number;
-  kolumna: number;
-  data_stworzenia: string;
-  czy_zrobione: boolean;
-  czy_wazne: boolean;
-  zawartosc: string;
-  data_rozpoczecia: string;
-  data_zakonczenia: string;
-  stworzone_przez: number;
-}>();
+const props = defineProps({
+  id: Number,
+  kolumna: Number,
+  data_stworzenia: String,
+  czy_zrobione: Boolean,
+  czy_wazne: Boolean,
+  zawartosc: String,
+  data_rozpoczecia: String,
+  data_zakonczenia: String,
+  stworzone_przez: Number,
+});
 
 async function usunNotatke() {
   const noteDeleteResponse = await TimeHubClient.delete("notatka/" + props.id + "/");
