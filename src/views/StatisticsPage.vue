@@ -40,6 +40,8 @@ export default defineComponent({
 
       store.dispatch("getWykresy", prawy_wykres_response.data);
       this.prawy_wykres_data = Object.values(prawy_wykres_response.data);
+
+      this.reload_stat();
     } catch (error) {
       this.lewy_wykres_label = "Nie można było pobrać danych";
     }
