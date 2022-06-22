@@ -8,38 +8,43 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { INITIAL_EVENTS, createEventId } from '@/event-utils'
 import { onMounted } from 'vue';
 import axios from 'axios';
+import event from '@/models/event'
+import store from "../store";
+import { mapGetters } from "vuex";
 
-/*
 const id = ref(1)
 
 const events = ref([
 
 ]);
 
-onMounted(() => {
-  axios.get('https://projekt-timehub.herokuapp.com/api/uzytkownikNotatki/', {headers: {
-        Authorization: 'Bearer ' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU1NzE0MzA0LCJpYXQiOjE2NTU3MTA3MDQsImp0aSI6IjRkMGM4MzMxMzdmMzQ0ODk4MWFkMDQyY2MwYTc5YmNlIiwidXNlcl9pZCI6Mn0.k0VO6hXkS15RIUKuKwOFlzZUrEx_9kW2BYelcRlqW5s",
-      }}).then(Data=>{
-    console.log(Data);
-    Demo.events = Data.data.map((e: React.ChangeEvent<HTMLInputElement>)=>{
-      return{
-      id: e.id,
-      title: e.zawartosc,
-      start: e.data_rozpoczecia,
-      end: e.data_zakonczenia,
-      allDay: true
-      }
-    });
-  })
-  .catch(error=>console.log(error))
-})
-*/
+
+
+
 const Demo = defineComponent({
   components: {
     FullCalendar,
   },
+    created() {
+    axios.get('https://projekt-timehub.herokuapp.com/api/uzytkownikNotatki/', {headers: {
+        Authorization: 'Bearer ' + this.token,
+      }}).then((Data)=>{
+      this.calendarOptions.events = Data.data.map((e: event)=>{
+        return{
+        id: e.id,
+        title: e.zawartosc,
+        start: e.data_rozpoczecia,
+        end: e.data_zakonczenia,
+        allDay: true
+        }
+      });
+  })
+  .catch(error=>console.log(error));
+},
+computed: { ...mapGetters({ token: "getToken" }) },
   data() {
     return {
+      events,
       calendarOptions: {
         plugins: [
           dayGridPlugin,
@@ -52,7 +57,6 @@ const Demo = defineComponent({
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         initialView: 'dayGridMonth',
-        initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         editable: true,
         selectable: true,
         selectMirror: true,
@@ -70,30 +74,16 @@ const Demo = defineComponent({
     handleWeekendsToggle() {
       this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
     },
-    handleDateSelect(selectInfo: DateSelectArg) {
-      let title = prompt('Podaj nazwe wydarzenia: ')
-      let calendarApi = selectInfo.view.calendar
-
-      calendarApi.unselect() // clear date selection
-
-      if (title) {
-        calendarApi.addEvent({
-          id: createEventId(),
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-          allDay: selectInfo.allDay
-        })
-      }
-    },
     handleEventClick(clickInfo: EventClickArg) {
+      //console.log(clickInfo);
       if (confirm(`Potwierdz usuniecie wydarzenia: '${clickInfo.event.title}'`)) {
         clickInfo.event.remove()
+        axios.delete(`https://projekt-timehub.herokuapp.com/api/notatka/${clickInfo.event._def.publicId}/`)
       }
     },
     handleEvents(events: EventApi[]) {
       this.currentEvents = events
-    },
+    },   
   }
 })
 export default Demo
