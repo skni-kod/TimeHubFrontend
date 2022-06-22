@@ -23,22 +23,43 @@
 
 <script lang="ts">
 import Chart from "chart.js/auto";
-import axios from "axios";
+import { defineComponent } from "vue";
 
-export default {
-  async created() {
-    const { data } = await axios.get(
-      "https://projekt-timehub.herokuapp.com/api/statystykaNotatkiSkonczoneAktywne7Dni/"
-    );
-    let zrobione: Promise<void> = data.zrobione + 2; //+1 jest dla testu xd
-    let wtrakcie: Promise<void> = data.w_trakcie + 3;
+export default defineComponent({
+  props: [
+    "lewy_wykres_label",
+    "lewy_wykres_data",
+    "prawy_wykres_label",
+    "prawy_wykres_data",
+  ],
+  setup(): { pageName: string } {
+    var path = window.location.pathname;
+    const URLPageName = path.substring(path.lastIndexOf("/") + 1);
 
+    return {
+      pageName: URLPageName,
+    };
+  },
+
+  mounted() {
     const leftChartPlace: any = document.getElementById("leftChart");
     const rightChartPlace: any = document.getElementById("rightChart");
     const bottomChartPlace: any = document.getElementById("bottomChart");
-
     const randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
-    const randomRGB = () => `rgb(${randomNum()}, ${randomNum()}, ${randomNum()}, 0.5)`;
+    const randomRGB = () =>
+      `rgb(${randomNum()}, ${randomNum()}, ${randomNum()}, 0.5)`;
+
+    let prawy_label = [];
+    let prawy_data = [];
+    let prawy_kolory = [];
+
+    for (let i = 0; i < this.prawy_wykres_label.length; i++) {
+      if (this.prawy_wykres_data[i] != 0) {
+        prawy_label.push(this.prawy_wykres_label[i]);
+        prawy_data.push(this.prawy_wykres_data[i]);
+        prawy_kolory.push(randomRGB());
+      }
+    }
 
     var optionsLeft = {
       maintainAspectRatio: false,
@@ -102,10 +123,10 @@ export default {
     const leftChart = new Chart(leftChartPlace, {
       type: "doughnut",
       data: {
-        labels: ["Zrobione: " + zrobione, "W trakcie: " + wtrakcie],
+        labels: [this.lewy_wykres_label[0], this.lewy_wykres_label[1]],
         datasets: [
           {
-            data: [zrobione, wtrakcie],
+            data: [this.lewy_wykres_data[0], this.lewy_wykres_data[1]],
             backgroundColor: [randomRGB(), randomRGB()],
             borderColor: ["rgba(0,0,0,0)", "rgba(0,0,0,0)"],
             borderWidth: 5,
@@ -118,11 +139,11 @@ export default {
     const rightChart = new Chart(rightChartPlace, {
       type: "doughnut",
       data: {
-        labels: ["DaftCode", "Skyware", "Rocket Launcher"],
+        labels: prawy_label,
         datasets: [
           {
-            data: [4, 6, 3],
-            backgroundColor: [randomRGB(), randomRGB(), randomRGB()],
+            data: prawy_data,
+            backgroundColor: prawy_kolory,
             borderColor: ["rgba(0,0,0,0)", "rgba(0,0,0,0)", "rgba(0,0,0,0)"],
             borderWidth: 1,
           },
@@ -168,11 +189,10 @@ export default {
           },
         ],
       },
-
       options: optionsBottom,
     });
   },
-};
+});
 </script>
 
 <style scoped lang="scss">
