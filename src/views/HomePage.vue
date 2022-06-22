@@ -96,8 +96,7 @@
   font-size: 1.2em;
   font-style: italic;
 }
-:not(:placeholder-shown) {
-}
+
 .placeholder {
   width: 100%;
   height: 15%;

@@ -15,23 +15,26 @@ const props = defineProps<{
   stworzone_przez: number;
 }>();
 
-let tekstZawartosci = ref<string>("Napisz coś...");
+let tekstZawartosci = ref<string>(props.zawartosc);
 
 async function usunNotatke() {
-  const noteDeleteResponse = await TimeHubClient.delete("notatka/" + props.id + "/");
+  try {
+    const noteDeleteResponse = await TimeHubClient.delete("notatka/" + props.id + "/");
+  } catch(error) {
+    console.log(error);
+  }
   emit('zmianaNotatki');
 }
 
 async function ustawWazne() {
-  const noteDeleteResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {czy_wazne: !props.czy_wazne});
+  const noteWazneResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {czy_wazne: !props.czy_wazne});
   emit('zmianaNotatki');
 }
 
 async function ustawZawartosc(val: string) {
-  console.log("ustawiono zawartość: " + tekstZawartosci.value)
-  const noteDeleteResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {zawartosc: val});
-  emit('zmianaNotatki');
+  const notePushResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {zawartosc: val});
 }
+
 </script>
 
 <template>
@@ -61,9 +64,10 @@ async function ustawZawartosc(val: string) {
     </div>
     <textarea
       class="zawartoscNotatki"
+      onload='this.style.height = "";this.style.height = this.scrollHeight + "px"'
       oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-      v-text="props.zawartosc"
       v-model="tekstZawartosci"
+      @input="ustawZawartosc(tekstZawartosci)"
       @blur="ustawZawartosc(tekstZawartosci)"
     />
     <div class="kontenerCzasow">
