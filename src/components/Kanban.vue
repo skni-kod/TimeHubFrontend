@@ -31,14 +31,13 @@ onBeforeMount(async () => {
 });
 
 async function updateKolumnyWKanbanie() {
+  console.log("Przed: " + cols.value);
+  cols.value.splice(0, cols.value.length);
   const colsInitResponse = await TimeHubClient.get("tablicaKolumny/" + route.params.id + "/");
-  //console.log(colsInitResponse.data);
-  colsInitResponse.data.forEach(() => {
-      cols.value.pop();
-    });
   colsInitResponse.data.forEach((col: Kol) => {
     cols.value.push(col);
   });
+  console.log("Po: " + cols.value);
 }
 
 async function utworzKolumne() {

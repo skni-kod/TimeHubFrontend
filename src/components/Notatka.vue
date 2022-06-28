@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from "vue";
+import { onMounted, defineProps, defineEmits, ref } from "vue";
 import TimeHubClient from "@/axios-client";
 const emit = defineEmits(['zmianaNotatki']);
 
@@ -16,6 +16,29 @@ const props = defineProps<{
 }>();
 
 let tekstZawartosci = ref<string>(props.zawartosc);
+
+let dataRozpoczecia = ref<string>(props.data_rozpoczecia);
+let dataZakonczenia = ref<string>(props.data_zakonczenia);
+
+let nazwaTworcy = ref<string>();
+
+const zawartoscNotatki = ref();
+
+onMounted(() => {
+  zawartoscNotatki.value.style.height = "";
+  zawartoscNotatki.value.style.height = zawartoscNotatki.value.scrollHeight + 8 + "px";
+
+  ustawNazweTworcy();
+})
+
+async function ustawNazweTworcy() {
+  try {
+    const tworcaNameResponse = await TimeHubClient.get("user/" + props.stworzone_przez + "/");
+    nazwaTworcy.value = tworcaNameResponse.data.username;
+  } catch(error) {
+    console.log(error)
+  }
+}
 
 async function usunNotatke() {
   try {
@@ -35,6 +58,13 @@ async function ustawZawartosc(val: string) {
   const notePushResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {zawartosc: val});
 }
 
+async function ustawCzasRozpoczecia(val: string) {
+  const timeResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {data_rozpoczecia: val});
+}
+
+async function ustawCzasZakonczenia(val: string) {
+  const timeResponse = await TimeHubClient.patch("notatka/" + props.id + "/", {data_zakonczenia: val});
+}
 </script>
 
 <template>
@@ -50,8 +80,8 @@ async function ustawZawartosc(val: string) {
           version="1.1"
           x="0px"
           y="0px"
-          width="20px"
-          height="20px"
+          width="16px"
+          height="16px"
           viewBox="0 0 490 490"
           xml:space="preserve"
         >
@@ -64,17 +94,18 @@ async function ustawZawartosc(val: string) {
     </div>
     <textarea
       class="zawartoscNotatki"
-      onload='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-      oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+      ref="zawartoscNotatki"
+      oninput='this.style.height = "";this.style.height = this.scrollHeight + 8 + "px"'
+      placeholder="Napisz coś..."
       v-model="tekstZawartosci"
       @input="ustawZawartosc(tekstZawartosci)"
       @blur="ustawZawartosc(tekstZawartosci)"
     />
     <div class="kontenerCzasow">
+      <span class="czasRozpoczecia" >Od: <input class="inputCzasuRozpoczecia" v-model="dataRozpoczecia" @input="ustawCzasRozpoczecia(dataRozpoczecia)"/></span>
+      <span class="czasZakonczenia">Do: <input class="inputCzasuZakonczenia" v-model="dataZakonczenia" @input="ustawCzasZakonczenia(dataZakonczenia)"/></span>
       <span class="czasUtworzenia">Stworzono: {{ props.data_stworzenia }}</span>
-      <span class="tworca">Przez: {{ stworzone_przez }}</span>
-      <span class="czasRozpoczecia">Od: {{ props.data_rozpoczecia }}</span>
-      <span class="czasZakonczenia">Do: {{ props.data_zakonczenia }}</span>
+      <span class="tworca">Przez: {{ nazwaTworcy }}</span>
     </div>
   </div>
 </template>
@@ -109,7 +140,7 @@ async function ustawZawartosc(val: string) {
 }
 
 .czyWaznePasek {
-  width: 80%;
+  width: 85%;
   height: 16px;
   margin-right: 8px;
   border-radius: 16px;
@@ -124,8 +155,8 @@ async function ustawZawartosc(val: string) {
 }
 
 .przyciskUsunieciaNotatki {
-  height: 36px;
-  width: 20%;
+  height: 22px;
+  width: 15%;
   margin-top: 6px;
   margin-bottom: 6px;
   font-size: xx-large;
@@ -156,6 +187,9 @@ async function ustawZawartosc(val: string) {
   display: table;
   resize: none;
   width: 90%;
+  font-size: large;
+  font-family:serif;
+  color:#2c3e50;
   margin-top: 8px;
   margin-bottom: 8px;
   padding: 8px;
@@ -165,13 +199,29 @@ async function ustawZawartosc(val: string) {
 .kontenerCzasow {
   display: flex;
   flex-direction: column;
-  font-size: xx-small;
+  font-size: small;
   font-style: italic;
   align-items: flex-start;
   width: 90%;
   span {
     margin-left: 8px;
     margin-right: 8px;
+    font-size: small;
+    font-weight: 600;
+    input {
+      border: 0;
+      color:#2c3e50;
+      font-weight: 600;
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      resize: horizontal;
+      min-width: 85%;
+    }
+
+    input:active {
+      width: auto;
+    }
   }
 }
 </style>

@@ -83,7 +83,7 @@ async function ustawZawartosc(val: string) {
 <template>
   <div class="kontenerKolumny">
     <div class="kontenerGornyKolumny">
-      <textarea class="kontenerTytuluKolumny" v-model="tekstTytulu" @input="ustawZawartosc(tekstTytulu)" @blur="ustawZawartosc(tekstTytulu)"></textarea>
+      <input class="kontenerTytuluKolumny" v-model="tekstTytulu" @input="ustawZawartosc(tekstTytulu)" @blur="ustawZawartosc(tekstTytulu)"/>
       <button class="przyciskOpcjiKolumny" @click="usunKolumne">
         <svg
           id="ikonkaPrzyciskuOpcjiKolumny1"
@@ -92,9 +92,9 @@ async function ustawZawartosc(val: string) {
           version="1.1"
           x="0px"
           y="0px"
-          width="32px"
-          height="32px"
-          viewBox="0 0 569.613 569.614"
+          width="20px"
+          height="20px"
+          viewBox="0 0 490 490"
         >
           <polygon
             xmlns="http://www.w3.org/2000/svg"
@@ -167,13 +167,15 @@ async function ustawZawartosc(val: string) {
   font-weight: 600;
   border: 0;
   resize: none;
+  color: #2c3e50;
+  cursor: context-menu;
   text-align:center;
   vertical-align:middle;
 }
 
 .przyciskOpcjiKolumny {
-  height: 48px;
-  width: 20%;
+  height: 32px;
+  width: 15%;
   margin-top: 12px;
   margin-bottom: 6px;
   margin-right: 8px;
