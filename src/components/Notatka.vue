@@ -17,9 +17,8 @@ const props = defineProps<{
 
 let tekstZawartosci = ref<string>(props.zawartosc);
 
-let dataRozpoczecia = ref<string>(props.data_rozpoczecia);
-let dataZakonczenia = ref<string>(props.data_zakonczenia);
-
+let dataRozpoczecia = ref<string>(props.data_rozpoczecia.slice(0,19));
+let dataZakonczenia = ref<string>(props.data_zakonczenia.slice(0,19));
 let nazwaTworcy = ref<string>();
 
 const zawartoscNotatki = ref();
@@ -102,9 +101,9 @@ async function ustawCzasZakonczenia(val: string) {
       @blur="ustawZawartosc(tekstZawartosci)"
     />
     <div class="kontenerCzasow">
-      <span class="czasRozpoczecia" >Od: <input class="inputCzasuRozpoczecia" v-model="dataRozpoczecia" @input="ustawCzasRozpoczecia(dataRozpoczecia)"/></span>
-      <span class="czasZakonczenia">Do: <input class="inputCzasuZakonczenia" v-model="dataZakonczenia" @input="ustawCzasZakonczenia(dataZakonczenia)"/></span>
-      <span class="czasUtworzenia">Stworzono: {{ props.data_stworzenia }}</span>
+      <span class="czasRozpoczecia" >Od: <input class="inputCzasuRozpoczecia" type="datetime-local" v-model="dataRozpoczecia" @input="ustawCzasRozpoczecia(dataRozpoczecia)"/></span>
+      <span class="czasZakonczenia">Do: <input class="inputCzasuZakonczenia" type="datetime-local" v-model="dataZakonczenia" @input="ustawCzasZakonczenia(dataZakonczenia)"/></span>
+      <span class="czasUtworzenia">Stworzono: {{ props.data_stworzenia.slice(0,23).replace("T", " ") }}</span>
       <span class="tworca">Przez: {{ nazwaTworcy }}</span>
     </div>
   </div>
